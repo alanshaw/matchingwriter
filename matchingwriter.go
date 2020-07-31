@@ -31,28 +31,32 @@ import (
 
 // MatchingWriter is a io.WriteCloser that matches on a substr
 type MatchingWriter struct {
-	substr string
-	C      chan string
+	str string
+	C   chan string
 }
 
 // New creates a writer that writes the matched chunk to it's channel when a
 // chunk is written that contains the passed substr.
-func New(substr string, bufferlen int) *MatchingWriter {
+func New(str string, bufferlen int) *MatchingWriter {
 	matches := make(chan string, bufferlen)
-	return &MatchingWriter{substr, matches}
+	return &MatchingWriter{str, matches}
 }
 
-// Write checks to see if the written bytes contain the substr and sends the
-// bytes to the channel if they do.
+// Write calls `WriteString`.
 func (mw *MatchingWriter) Write(p []byte) (n int, err error) {
-	data := string(p)
-	if strings.Contains(data, mw.substr) {
+	return mw.WriteString(string(p))
+}
+
+// WriteString checks to see if the written string contains the string to match
+// and sends the written string to the channel if it does.
+func (mw *MatchingWriter) WriteString(s string) (n int, err error) {
+	if strings.Contains(s, mw.str) {
 		select {
-		case mw.C <- data:
+		case mw.C <- s:
 		default:
 		}
 	}
-	return len(p), nil
+	return len(s), nil
 }
 
 // Close closes the match channel.
