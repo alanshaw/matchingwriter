@@ -1,25 +1,25 @@
 os:
-    - linux
-  
-  language: go
-  
-  go:
-    - 1.14.x
-  
-  env:
+  - linux
+
+language: go
+
+go:
+  - 1.14.x
+
+env:
   matrix:
     - GOTFLAGS="-race"
-  
-  cache:
+
+cache:
   directories:
     - $GOPATH/pkg/mod
     - $HOME/.cache/go-build
-  
-  script:
-    - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
-  
-  after_success:
-    - bash <(curl -s https://codecov.io/bash)
-  
-  notifications:
-    email: false
+
+script:
+  - go test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+notifications:
+  email: false
