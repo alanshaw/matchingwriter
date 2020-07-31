@@ -20,25 +20,25 @@ go get github.com/alanshaw/matchingwriter
 Example:
 
 ```go
-	package main
+package main
 
-	import (
-		"fmt"
-		"github.com/alanshaw/matchingwriter"
-	)
+import (
+	"fmt"
+	"github.com/alanshaw/matchingwriter"
+)
 
-	func main() {
-		w := matchingwriter.New("unicorn", 1) // 1 is channel buffer length
+func main() {
+	w := matchingwriter.New("unicorn", 1) // 1 is channel buffer length
 
-		w.Write([]byte("unicorns are great!")) // will match "unicorn"
-		w.Close() // closes w.C
+	w.Write([]byte("unicorns are great!")) // will match "unicorn"
+	w.Close() // closes w.C
 
-		for match := range w.C {
-			fmt.Println(match)
-		}
-
-		// prints "unicorns are great!" and then exits
+	for match := range w.C {
+		fmt.Println(match)
 	}
+
+	// prints "unicorns are great!" and then exits
+}
 ```
 
 ## API
